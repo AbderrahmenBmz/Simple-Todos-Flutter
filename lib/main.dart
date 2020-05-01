@@ -29,6 +29,10 @@ class _SimpleTodoState extends State<SimpleTodo> {
     setState(() => _todoItems.add(item));
   }
 
+  void _removeTodoItem(int index) {
+    setState(() => _todoItems.removeAt(index));
+  }
+
   // Build the whole list of todo items
   Widget _buildTodoList() {
     return new ListView.builder(
@@ -44,29 +48,49 @@ class _SimpleTodoState extends State<SimpleTodo> {
     return ListTile(title: Text(todoText));
   }
 
-  void _pushAddTodoScreen(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return Scaffold(
-            appBar : AppBar(
-              title:Text('Add a new Task pls '),
-            ),
-            body: Center(
-              child: TextField(
-                autofocus: true,
-                onSubmitted: (value){
-                  _addTodoItem(value);
-                  Navigator.pop(context);
-                },
-                decoration: InputDecoration(
-                  hintText:'Entre Something to do .. ',
-                  contentPadding: const EdgeInsets.all(16.0)
-                ),
+  void _pushAddTodoScreen() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Add a new Task pls '),
+        ),
+        body: Center(
+          child: TextField(
+            autofocus: true,
+            onSubmitted: (value) {
+              _addTodoItem(value);
+              Navigator.pop(context);
+            },
+            decoration: InputDecoration(
+                hintText: 'Entre Something to do .. ',
+                contentPadding: const EdgeInsets.all(16.0)),
+          ),
+        ),
+      );
+    }));
+  }
+
+  void _promptRemoveTodoItem(int index) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Mark "${_todoItems[index]}" as Done ?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('CANCEL'),
               ),
-            ),
-        );
-      })
-    );
+              FlatButton(
+                onPressed: () {
+                  _removeTodoItem(index);
+                  Navigator.of(context).pop();
+                },
+                child: Text('Mark as Done'),
+              ),
+            ],
+          );
+        });
   }
 
   @override
