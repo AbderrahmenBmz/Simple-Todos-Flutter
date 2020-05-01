@@ -38,14 +38,15 @@ class _SimpleTodoState extends State<SimpleTodo> {
     return new ListView.builder(
       itemBuilder: (context, index) {
         if (index < _todoItems.length) {
-          return _buildTodoItem(_todoItems[index]);
+          return _buildTodoItem(_todoItems[index] , index);
         }
       },
     );
   }
 
-  Widget _buildTodoItem(String todoText) {
-    return ListTile(title: Text(todoText));
+  Widget _buildTodoItem(String todoText ,int index) {
+    return ListTile(title: Text(todoText),
+    onTap: () => _promptRemoveTodoItem(index),);
   }
 
   void _pushAddTodoScreen() {
@@ -104,6 +105,7 @@ class _SimpleTodoState extends State<SimpleTodo> {
         onPressed: _pushAddTodoScreen,
         tooltip: 'Add Task',
         child: Icon(Icons.add),
+        
       ),
     );
   }
