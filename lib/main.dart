@@ -25,11 +25,8 @@ class SimpleTodo extends StatefulWidget {
 class _SimpleTodoState extends State<SimpleTodo> {
   List<String> _todoItems = [];
 
-  void _addTodoItem() {
-    setState(() {
-      int index = _todoItems.length;
-      _todoItems.add('Item' + index.toString());
-    });
+  void _addTodoItem(String item) {
+    setState(() => _todoItems.add(item));
   }
 
   // Build the whole list of todo items
@@ -47,6 +44,31 @@ class _SimpleTodoState extends State<SimpleTodo> {
     return ListTile(title: Text(todoText));
   }
 
+  void _pushAddTodoScreen(){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context){
+        return Scaffold(
+            appBar : AppBar(
+              title:Text('Add a new Task pls '),
+            ),
+            body: Center(
+              child: TextField(
+                autofocus: true,
+                onSubmitted: (value){
+                  _addTodoItem(value);
+                  Navigator.pop(context);
+                },
+                decoration: InputDecoration(
+                  hintText:'Entre Something to do .. ',
+                  contentPadding: const EdgeInsets.all(16.0)
+                ),
+              ),
+            ),
+        );
+      })
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +77,7 @@ class _SimpleTodoState extends State<SimpleTodo> {
       ),
       body: _buildTodoList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addTodoItem,
+        onPressed: _pushAddTodoScreen,
         tooltip: 'Add Task',
         child: Icon(Icons.add),
       ),
